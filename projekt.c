@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
+#include <pthread.h>
+#include <unistd.h>
 
 
 int main(int arg,char **argv)
 {
+<<<<<<< HEAD
 	//deklaracja zmiennych zaleznych od parametrow
     char *plik_zrodlowy;
     char *plik_docelowy;
@@ -82,3 +83,7 @@ int main(int arg,char **argv)
         printf("\nParametry sa poprawne.");
     }
 }
+=======
+	
+}
+>>>>>>> 43eaa8e4097a881e0a33c6d92571c46fd80e47fc
