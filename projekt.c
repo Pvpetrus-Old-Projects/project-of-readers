@@ -2,88 +2,56 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <syslog.h>
+
+pthread_mutex_t blokadaCzytelnikow;
+pthread_mutex_t blokadPisarzy;
 
 
 int main(int arg,char **argv)
 {
 <<<<<<< HEAD
 	//deklaracja zmiennych zaleznych od parametrow
-    char *plik_zrodlowy;
-    char *plik_docelowy;
-    int czas=3;
+    char readers;
+    char writers;
+    int liczba_czytelnikow;
+    int liczba_pisarzy;
     //
     //kod na sprawdzenie parametrow
     bool czy_parametry_poprawne=true;
 
-    if(argc<=2 || argc>6) {
+    if(argc!=2) {
         czy_parametry_poprawne = false;
-        printf("\nzla liczba parametrow");
-    }
-    else {
-        //analiza i przypisywanie parametrow
-        for(int i = 1; i <  argc; i++)
-        {
-            printf("\nparametr %d-ty to: %s",i, argv[i]);
-            if(argv[i][0] == '-')
-            {
-                if(argv[i][1] == 'R')
-                {
-                    rekurencja = true;
-                }
-                else if(argv[i][1] == 'i')
-                {
-                    if(i+1 < argc )
-                    {
-                        czas=atoi(argv[i+1]);
-                        i++;
-                        printf("\nparametr %d-ty to: %s",i, argv[i]);
-                    }
-                    else
-                    {
-                        printf("\nnie podano czasu");
-                    }
-                }
-                else
-                {
-                    printf("\nzly parametr z myslnikiem na poczatku");
-                    czy_parametry_poprawne=false;
-                    break;
-                }
-            }
-            else if(i+1<argc)
-            {
-                plik_zrodlowy=argv[i];
-                i++;
-                plik_docelowy=argv[i];
-                printf("\nparametr %d-ty to: %s",i, argv[i]);
-            }
-            else
-            {
-                printf("\nzle parametry wejsciowe");
-                czy_parametry_poprawne=false;
-                break;
-            }
-
-
-
-        }
-        //
-    }
-    if(!czy_parametry_poprawne)
-    {
-        printf("\n Parametry niepoprawne");
-        printf("\nPoprawne parametry to: ");
-        printf("\nsynchronizacja_katalogow plik_zrodlowy plik_docelowy [-i czas(liczba calkowita)] [-R] ");
-
-
-        return -1;
+        printf("\n Zla liczba parametrow");
+	    retrun 0;
     }
     else
     {
-        printf("\nParametry sa poprawne.");
+	    if(atoi(argv[0]) != 0)
+	    {
+		    liczba_czytelenikow = atoi(argv[0]);
+		    printf("Ilośc czytleników wynosi: %d.", ilosc_czytlenikow); 
+	    }
+	    else if(argv[0]) == 0)
+	    {
+		    printf("Bledny parametr nr 1!");
+		    return 0;
+	    }
+	    else if(atoi(argv[1]) != 0)
+	    {
+		    liczba_pisarzy = atoi(argv[1]);
+		    printf("Ilośc pisarzy wynosi: %d.", ilosc_pisarzy); 
+	    }
+	    else
+	    {
+		    printf("Bledny parametr nr 2!");
+		    return 0;
+	    }
+	    
+	    
+	    
     }
-}
-=======
+        
+	return 0;
 	
 }
->>>>>>> 43eaa8e4097a881e0a33c6d92571c46fd80e47fc
