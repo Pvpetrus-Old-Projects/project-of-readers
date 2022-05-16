@@ -10,15 +10,11 @@ pthread_mutex_t blokadPisarzy;
 
 int main(int arg,char **argv)
 {
-<<<<<<< HEAD
-	//deklaracja zmiennych zaleznych od parametrow
+
     char readers;
     char writers;
     int liczba_czytelnikow;
     int liczba_pisarzy;
-    //
-    //kod na sprawdzenie parametrow
-    bool czy_parametry_poprawne=true;
 
     if(argc!=2) {
         czy_parametry_poprawne = false;
