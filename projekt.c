@@ -47,10 +47,9 @@ int main(int arg,char **argv)
 		    printf("Bledny parametr nr 2!");
 		    return 0;
 	    }
-	    
-	    
-	    
+    
     }
+	printf("Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba pisarzy);
         
 	return 0;
 	
