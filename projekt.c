@@ -17,7 +17,6 @@ int main(int arg,char **argv)
     int liczba_pisarzy;
 
     if(argc!=2) {
-        czy_parametry_poprawne = false;
         printf("\n Zla liczba parametrow");
 	    retrun 0;
     }
