@@ -61,8 +61,8 @@ void* pisarz(void *argument)
 		aktualniepiszacy+=1;
 		usleep(generatorCzasuCzekania());//pisarz korzysta z czytelni
 		wypiszKomunikat();
+		aktualniepiszacy-=1;//pisarz wychodzi
 		pthread_mutex_unlock(&blokadaPisarzy);
-		aktualniepiszacy-=1;
 	}
 	return 0;
 }
