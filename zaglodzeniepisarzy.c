@@ -7,16 +7,25 @@
 
 pthread_mutex_t blokadaCzytelnikow;
 pthread_mutex_t blokadaPisarzy;
+int aktualnieczytajacy=0;
+int aktualniepiszacy=0;
+int liczba_czytelnikow=5;
+int liczba_pisarzy=1;
 
 void* czytelnik(void *argument);
 void* pisarz(void *argument);
-
+void wypiszKomunikat();
+void wypiszKomunikat()
+{
+	syslog(LOG_NOTICE, "READERQ: "+(liczba_czytelnikow-aktualnieczytajacy)+"WriterQ: "+(liczba_pisarzy-aktualniepiszacy)+ 
+	"[in: R:"+aktualnieczytajacy+" W:"+aktualniepiszacy+"]");
+}
 void* czytelnik(void *argument)
 {
 	srand(time(NULL));
 	while(1==1)
 	{
-		
+		wypiszKomunikat();
 	}
 	return 0;
 }
@@ -26,16 +35,13 @@ void* pisarz(void *argument)
 	srand(time(NULL));
 	while(1==1)
 	{
-
+		wypiszKomunikat();
 	}
 	return 0;
 }
 
 int main(int argc, char *argv[])
 {
-
-    int liczba_czytelnikow=5;
-    int liczba_pisarzy=1;
 	int nr_blednego_parametru = 0;
 	pthread_mutex_init(&blokadaCzytelnikow, NULL);
 	pthread_mutex_init(&blokadaPisarzy, NULL);
