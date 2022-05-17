@@ -15,6 +15,11 @@ int liczba_pisarzy=1;
 void* czytelnik(void *argument);
 void* pisarz(void *argument);
 void wypiszKomunikat();
+int generatorCzasuCzekania();
+int generatorCzasuCzekania()
+{
+	return rand()%90000  + 10000;//losowa ilosc czasu z przedzialu: [0.01s,0.1s)
+}
 void wypiszKomunikat()
 {
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
@@ -27,10 +32,20 @@ void* czytelnik(void *argument)
 	srand(time(NULL));
 	while(1==1)
 	{
-		
-		pthread_mutex_lock(&blokadaCzytelnikow);
+		//Czytelnik próbuje wejść do czytelni
+		if(aktualnieczytajacy==0)
+		{
+			pthread_mutex_lock(&blokadaPisarzy);
+		}
+		aktualnieczytajacy+=1;
+		usleep(generatorCzasuCzekania());//czytelnik robi coś w czytelni przez losową ilość czasu
 		wypiszKomunikat();
-		pthread_mutex_unlock(&blokadaCzytelnikow);
+		aktualniepiszacy-=1;//czytelnik wychodzi
+		if(aktualnieczytajacy==0)
+		{
+			pthread_mutex_unlock(&blokadaPisarzy);
+		}
+		
 	}
 	return 0;
 }
@@ -41,9 +56,13 @@ void* pisarz(void *argument)
 	srand(time(NULL));
 	while(1==1)
 	{
+		//pisarz próbuje wejść do czytelni
 		pthread_mutex_lock(&blokadaPisarzy);
+		aktualniepiszacy+=1;
+		usleep(generatorCzasuCzekania());//pisarz korzysta z czytelni
 		wypiszKomunikat();
 		pthread_mutex_unlock(&blokadaPisarzy);
+		aktualniepiszacy-=1;
 	}
 	return 0;
 }
