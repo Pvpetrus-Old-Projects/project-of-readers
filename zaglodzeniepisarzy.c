@@ -17,25 +17,33 @@ void* pisarz(void *argument);
 void wypiszKomunikat();
 void wypiszKomunikat()
 {
+	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
 	syslog(LOG_NOTICE, "READERQ: "+(liczba_czytelnikow-aktualnieczytajacy)+"WriterQ: "+(liczba_pisarzy-aktualniepiszacy)+ 
 	"[in: R:"+aktualnieczytajacy+" W:"+aktualniepiszacy+"]");
 }
 void* czytelnik(void *argument)
 {
+	//funkcja wątku czytelnika
 	srand(time(NULL));
 	while(1==1)
 	{
+		
+		pthread_mutex_lock(&blokadaCzytelnikow);
 		wypiszKomunikat();
+		pthread_mutex_unlock(&blokadaCzytelnikow);
 	}
 	return 0;
 }
 
 void* pisarz(void *argument)
 {
+	//funkcja wątku pisarza
 	srand(time(NULL));
 	while(1==1)
 	{
+		pthread_mutex_lock(&blokadaPisarzy);
 		wypiszKomunikat();
+		pthread_mutex_unlock(&blokadaPisarzy);
 	}
 	return 0;
 }
