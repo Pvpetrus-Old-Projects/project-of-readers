@@ -13,12 +13,22 @@ void* pisarz(void *argument);
 
 void* czytelnik(void *argument)
 {
-
+	srand(time(NULL));
+	while(1==1)
+	{
+		
+	}
+	return 0;
 }
 
 void* pisarz(void *argument)
 {
-	
+	srand(time(NULL));
+	while(1==1)
+	{
+
+	}
+	return 0;
 }
 
 int main(int argc, char *argv[])
@@ -92,22 +102,29 @@ int main(int argc, char *argv[])
 		}
     
     }
+	//utworzenie logu pozwalającego na śledzenie działania programu
 	openlog("Threads", LOG_PID, LOG_DAEMON);
 	syslog(LOG_NOTICE, "The program has started working");
 	printf("Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba_pisarzy);
 	
+	//tworzenie wątków
 	pthread_t pisarze[liczba_pisarzy];
 	pthread_t czytelnicy[liczba_czytelnikow];
-	//tworzenie wątków
 	int i=0;
 	for(i=0;i<liczba_czytelnikow;i++)
 	{
 		pthread_create(&czytelnicy[i],NULL,czytelnik,NULL);
+		//sleep(2);
+		//tu należy dać funkcję czekająca pewną ilość czasu, aby zagłodzić pisarzy, gdyż po takim zabiegu, przy odpowiednim dobraniu czasu 
+		//odczekania i ilości czytelników, gdy jeden czytelnik skończy, do biblioteki przyjdzie kolejny, a biblioteka nigdy nie będzie pusta
+		//i pisarze nie będą mogli wejść
 	}
 	for(i=0;i<liczba_pisarzy;i++)
 	{
 		pthread_create(&pisarze[i],NULL,pisarz,NULL);
 	}
+
+	//czekanie aż wątki się zakończą
 	for(i=0;i<liczba_czytelnikow;i++)
 	{
 		pthread_join(&czytelnicy[i],NULL);
@@ -116,7 +133,6 @@ int main(int argc, char *argv[])
 	{
 		pthread_join(&pisarze[i],NULL);
 	}
-	//tworzenie mutexów
 	
 	return 0;
 	
