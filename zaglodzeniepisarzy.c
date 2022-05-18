@@ -82,12 +82,12 @@ int main(int argc, char *argv[])
     {	
 		if(argc==2)
 		{
-			if(atoi(argv[1]) != 0)
+			if(sscanf(argv[1], "%u", &liczba_czytelnikow) != 0)
 			{
-				liczba_czytelnikow = atoi(argv[1]);
+				//liczba_czytelnikow = atoi(argv[1]);
 				//printf("Ilośc czytleników wynosi: %d.", liczba_czytelnikow); 
 			}
-			if(atoi(argv[1]) == 0)
+			else
 			{
 				//printf("Bledny parametr nr 1!");
 				nr_blednego_parametru = nr_blednego_parametru + 1;
@@ -96,12 +96,12 @@ int main(int argc, char *argv[])
 		}
 		if(argc==3)
 		{
-			if(atoi(argv[2]) != 0)
+			if(sscanf(argv[2], "%u", &liczba_pisarzy) != 0)
 			{
-				liczba_pisarzy = atoi(argv[2]);
+				//liczba_pisarzy = atoi(argv[2]);
 				printf("Ilośc pisarzy wynosi: %d.", liczba_pisarzy); 
 			}
-			if(atoi(argv[2]) == 0)
+			else
 			{
 				//printf("Bledny parametr nr 2!");
 				nr_blednego_parametru = nr_blednego_parametru + 2;
