@@ -18,7 +18,7 @@ void wypiszKomunikat();
 int generatorCzasuCzekania();
 int generatorCzasuCzekania()
 {
-	return rand()%10000  + 1000;//losowa ilosc czasu z przedzialu: [0.001s,0.011s)
+	return rand()%900000  + 100000;//losowa ilosc czasu z przedzialu: [0.1s,1s)
 }
 void wypiszKomunikat()
 {
