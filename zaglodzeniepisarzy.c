@@ -18,7 +18,7 @@ void wypiszKomunikat();
 int generatorCzasuCzekania();
 int generatorCzasuCzekania()
 {
-	return rand()%90000  + 10000;//losowa ilosc czasu z przedzialu: [0.01s,0.1s)
+	return rand()%10000  + 1000;//losowa ilosc czasu z przedzialu: [0.001s,0.011s)
 }
 void wypiszKomunikat()
 {
@@ -139,9 +139,8 @@ int main(int argc, char *argv[])
     }
 	//utworzenie logu pozwalającego na śledzenie działania programu
 	openlog("Threads", LOG_PID, LOG_DAEMON);
-	syslog(LOG_NOTICE, "The program has started working");
-	syslog(LOG_NOTICE,"Czytelnicy: %s, pisarze %s", argv[1], argv[2]);
-	syslog(LOG_NOTICE,"Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba_pisarzy);
+	syslog(LOG_NOTICE, "===---The program has started working---===");
+	syslog(LOG_NOTICE,"Czytelnicy: %d, pisarze: %d", liczba_czytelnikow, liczba_pisarzy);
 	
 	//tworzenie wątków
 	pthread_t pisarze[liczba_pisarzy];
@@ -150,7 +149,7 @@ int main(int argc, char *argv[])
 	for(i=0;i<liczba_czytelnikow;i++)
 	{
 		pthread_create(&czytelnicy[i],NULL,czytelnik,NULL);
-		//sleep(2);
+		sleep(2);
 		//tu należy dać funkcję czekająca pewną ilość czasu, aby zagłodzić pisarzy, gdyż po takim zabiegu, przy odpowiednim dobraniu czasu 
 		//odczekania i ilości czytelników, gdy jeden czytelnik skończy, do biblioteki przyjdzie kolejny, a biblioteka nigdy nie będzie pusta
 		//i pisarze nie będą mogli wejść
@@ -169,7 +168,7 @@ int main(int argc, char *argv[])
 	{
 		pthread_join(pisarze[i],NULL);
 	}
-	
+	syslog(LOG_NOTICE, "===---The program has ended working---===");
 	return 0;
 	
 }
