@@ -23,8 +23,8 @@ int generatorCzasuCzekania()
 void wypiszKomunikat()
 {
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
-	syslog(LOG_NOTICE, "READERQ: "+(liczba_czytelnikow-aktualnieczytajacy)+"WriterQ: "+(liczba_pisarzy-aktualniepiszacy)+ 
-	"[in: R:"+aktualnieczytajacy+" W:"+aktualniepiszacy+"]");
+	syslog(LOG_NOTICE, "READERQ: %d WriterQ: %d [in: R: %d W: %d]", (liczba_czytelnikow-aktualnieczytajacy),
+	(liczba_pisarzy-aktualniepiszacy), aktualnieczytajacy, aktualniepiszacy);
 }
 void* czytelnik(void *argument)
 {
@@ -40,7 +40,7 @@ void* czytelnik(void *argument)
 		aktualnieczytajacy+=1;
 		usleep(generatorCzasuCzekania());//czytelnik robi coś w czytelni przez losową ilość czasu
 		wypiszKomunikat();
-		aktualniepiszacy-=1;//czytelnik wychodzi
+		aktualnieczytajacy-=1;//czytelnik wychodzi
 		if(aktualnieczytajacy==0)
 		{
 			pthread_mutex_unlock(&blokadaPisarzy);
@@ -160,11 +160,11 @@ int main(int argc, char *argv[])
 	//czekanie aż wątki się zakończą
 	for(i=0;i<liczba_czytelnikow;i++)
 	{
-		pthread_join(&czytelnicy[i],NULL);
+		pthread_join(czytelnicy[i],NULL);
 	}
 	for(i=0;i<liczba_pisarzy;i++)
 	{
-		pthread_join(&pisarze[i],NULL);
+		pthread_join(pisarze[i],NULL);
 	}
 	
 	return 0;
