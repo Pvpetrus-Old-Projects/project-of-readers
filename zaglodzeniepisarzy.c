@@ -40,7 +40,7 @@ void* czytelnik(void *argument)
 		aktualnieczytajacy+=1;
 		usleep(generatorCzasuCzekania());//czytelnik robi coś w czytelni przez losową ilość czasu
 		wypiszKomunikat();
-		aktualniepiszacy-=1;//czytelnik wychodzi
+		aktualnieczytajacy-=1;//czytelnik wychodzi
 		if(aktualnieczytajacy==0)
 		{
 			pthread_mutex_unlock(&blokadaPisarzy);
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	//utworzenie logu pozwalającego na śledzenie działania programu
 	openlog("Threads", LOG_PID, LOG_DAEMON);
 	syslog(LOG_NOTICE, "The program has started working");
-	printf("Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba_pisarzy);
+	syslog(LOG_NOTICE,"Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba_pisarzy);
 	
 	//tworzenie wątków
 	pthread_t pisarze[liczba_pisarzy];
