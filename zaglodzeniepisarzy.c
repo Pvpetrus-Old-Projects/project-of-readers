@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
 	//utworzenie logu pozwalającego na śledzenie działania programu
 	openlog("Threads", LOG_PID, LOG_DAEMON);
 	syslog(LOG_NOTICE, "The program has started working");
+	syslog(LOG_NOTICE,"Czytelnicy: %s, pisarze %s", argv[1], argv[2]);
 	syslog(LOG_NOTICE,"Czytelnicy: %d, pisarze %d", liczba_czytelnikow, liczba_pisarzy);
 	
 	//tworzenie wątków
