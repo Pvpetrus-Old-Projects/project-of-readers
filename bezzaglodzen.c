@@ -94,8 +94,11 @@ void* pisarz(void *argument)
             pthread_cond_wait(&gotowyByCzytac, &kolejka);
             czekajacypisacze-=1;
         }
-        aktualniepiszacy = 1; 
-        wypiszKomunikat(); 
+        else
+        {
+            aktualniepiszacy = 1; 
+            wypiszKomunikat(); 
+        }
         pthread_mutex_unlock(&kolejka);
         
         
