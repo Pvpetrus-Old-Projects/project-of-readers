@@ -51,7 +51,7 @@ void* czytelnik(void *argument)
             aktualnieczytajacy+=1;
             wypiszKomunikat();
         }
-        thread_mutex_unlock(&kolejka);
+        pthread_mutex_unlock(&kolejka);
 
 
 		usleep(generatorCzasuCzekania());
