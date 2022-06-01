@@ -60,7 +60,7 @@ void* czytelnik(void *argument)
         
         pthread_mutex_lock(&kolejka);
         aktualnieczytajacy-=1;
-        if (aktualnieczytajacy == 0)
+        if (aktualnieczytajacy == 0 && czekajacyczytacze==0)
         {
             pthread_cond_signal(&gotowyByPisac);
         }
@@ -83,10 +83,9 @@ void* pisarz(void *argument)
         pthread_mutex_lock(&kolejka);  
         if (aktualnieczytajacy > 0 || aktualniepiszacy > 0) 
         {
-        czekajacypisacze+=1; 
-        pthread_cond_wait(&gotowyByCzytac, &kolejka); 
-        
-        czekajacypisacze-=1;
+            czekajacypisacze+=1; 
+            pthread_cond_wait(&gotowyByCzytac, &kolejka);
+            czekajacypisacze-=1;
         }
         aktualniepiszacy = 1; 
         wypiszKomunikat(); 
@@ -100,15 +99,15 @@ void* pisarz(void *argument)
         aktualniepiszacy = 0; 
         if (czekajacyczytacze == 0 && aktualnieczytajacy==0)
         {
-        pthread_cond_signal(&gotowyByPisac);
+            pthread_cond_signal(&gotowyByPisac);
         }
         else 
         {
-        pthread_cond_broadcast(&gotowyByCzytac); 
-        aktualnieczytajacy += czekajacyczytacze; 
-        czekajacyczytacze = 0; 
-        
-        wypiszKomunikat(); 
+            pthread_cond_broadcast(&gotowyByCzytac); 
+            aktualnieczytajacy += czekajacyczytacze; 
+            czekajacyczytacze = 0; 
+            
+            wypiszKomunikat(); 
         }
         pthread_mutex_unlock(&kolejka); 
         
