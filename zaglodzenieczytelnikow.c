@@ -11,6 +11,7 @@ pthread_mutex_t kolejkaCzytelnikow;
 pthread_mutex_t kolejkaPisarzy; 
 
 int aktualnieczytajacy=0;
+int aktualniepiszacy=0;
 int aktualniepiszacylubczekajacy=0;
 int liczba_czytelnikow=5;
 int liczba_pisarzy=1;
@@ -27,7 +28,7 @@ void wypiszKomunikat()
 {
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
 	syslog(LOG_NOTICE, "READERQ: %d WriterQ: %d [in: R: %d W: %d]", (liczba_czytelnikow-aktualnieczytajacy),
-	(liczba_pisarzy-aktualniepiszacylubczekajacy), aktualnieczytajacy, aktualniepiszacylubczekajacy);
+	(liczba_pisarzy-aktualniepiszacy), aktualnieczytajacy, aktualniepiszacy);
 }
 void* czytelnik(void *argument)
 {
@@ -75,8 +76,10 @@ void* pisarz(void *argument)
 
         }
         pthread_mutex_unlock(&kolejkaPisarzy);
+
 		//pisarz próbuje wejść do czytelni
 		pthread_mutex_lock(&blokadaPisarzy);
+        aktualniepiszacy+=1;
 		usleep(generatorCzasuCzekania());//pisarz korzysta z czytelni
 		wypiszKomunikat();
 		aktualniepiszacylubczekajacy-=1;//pisarz wychodzi
@@ -85,6 +88,7 @@ void* pisarz(void *argument)
             pthread_mutex_unlock(&blokadaCzytelnikow);
         }
 		pthread_mutex_unlock(&blokadaPisarzy);
+        aktualniepiszacy-=1;
         usleep(generatorCzasuCzekania());
 	}
 	return 0;
