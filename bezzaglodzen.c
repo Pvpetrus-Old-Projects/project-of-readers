@@ -98,8 +98,10 @@ void* pisarz(void *argument)
         
         pthread_mutex_lock(&kolejka); 
         aktualniepiszacy = 0; 
-        if (czekajacyczytacze == 0)
-        pthread_cond_signal(&gotowyByPisac); 
+        if (czekajacyczytacze == 0 && aktualnieczytajacy==0)
+        {
+        pthread_cond_signal(&gotowyByPisac);
+        }
         else 
         {
         pthread_cond_broadcast(&gotowyByCzytac); 
