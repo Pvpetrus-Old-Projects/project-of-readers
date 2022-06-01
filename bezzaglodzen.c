@@ -60,7 +60,7 @@ void* czytelnik(void *argument)
         
         pthread_mutex_lock(&kolejka);
         aktualnieczytajacy-=1;
-        if (aktualnieczytajacy == 0 && czekajacyczytacze==0)
+        if (aktualnieczytajacy == 0)
         {
             pthread_cond_signal(&gotowyByPisac);
         }
@@ -81,6 +81,7 @@ void* pisarz(void *argument)
         
         
         pthread_mutex_lock(&kolejka);  
+        aktualniepiszacy=0;
         if (aktualnieczytajacy > 0 || aktualniepiszacy > 0) 
         {
             czekajacypisacze+=1; 
@@ -97,11 +98,11 @@ void* pisarz(void *argument)
         
         pthread_mutex_lock(&kolejka); 
         aktualniepiszacy = 0; 
-        if (czekajacyczytacze == 0 && aktualnieczytajacy==0)
+        if (czekajacyczytacze == 0)
         {
             pthread_cond_signal(&gotowyByPisac);
         }
-        if(aktualniepiszacy==0)
+        else
         {
             pthread_cond_broadcast(&gotowyByCzytac); 
             aktualnieczytajacy += czekajacyczytacze; 
