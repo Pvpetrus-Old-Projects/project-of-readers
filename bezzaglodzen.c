@@ -29,6 +29,7 @@ void wypiszKomunikat()
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
 	syslog(LOG_NOTICE, "READERQ: %d WriterQ: %d [in: R: %d W: %d]", (liczba_czytelnikow-aktualnieczytajacy),
 	(liczba_pisarzy-aktualniepiszacy), aktualnieczytajacy, aktualniepiszacy);
+    syslog(LOG_NOTICE,"Czekajacy czytacze: ",czekajacyczytacze,"Czekajacy pisacze: ",czekajacypisacze);
 }
 void* czytelnik(void *argument)
 {
@@ -80,9 +81,14 @@ void* pisarz(void *argument)
 	{
         
         
-        pthread_mutex_lock(&kolejka);  
-        aktualniepiszacy=0;
-        if (aktualnieczytajacy > 0 || aktualniepiszacy > 0) 
+        pthread_mutex_lock(&kolejka);
+        if (aktualnieczytajacy > 0) 
+        {
+            czekajacypisacze+=1; 
+            pthread_cond_wait(&gotowyByCzytac, &kolejka);
+            czekajacypisacze-=1;
+        }
+        else if(aktualniepiszacy > 0)
         {
             czekajacypisacze+=1; 
             pthread_cond_wait(&gotowyByCzytac, &kolejka);
