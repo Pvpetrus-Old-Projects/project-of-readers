@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     {	
 		if(argc==2)
 		{
-			if(atoi(argv[1])!= 0)
+			if(atoi(argv[1])>= 0)
 			{
 				liczba_czytelnikow = atoi(argv[1]);
 			}
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		}
 		if(argc==3)
 		{	
-			if(atoi(argv[1])!= 0)
+			if(atoi(argv[1])>= 0)
 			{
 				liczba_czytelnikow = atoi(argv[1]);
 			}
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 			{
 				nr_blednego_parametru = nr_blednego_parametru + 1;
 			}
-			if(atoi(argv[2])!= 0)
+			if(atoi(argv[2])>= 0)
 			{
 				liczba_pisarzy = atoi(argv[2]);
 			}
