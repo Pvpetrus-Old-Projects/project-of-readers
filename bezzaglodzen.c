@@ -101,7 +101,7 @@ void* pisarz(void *argument)
         {
             pthread_cond_signal(&gotowyByPisac);
         }
-        else 
+        if(aktualniepiszacy==0)
         {
             pthread_cond_broadcast(&gotowyByCzytac); 
             aktualnieczytajacy += czekajacyczytacze; 
