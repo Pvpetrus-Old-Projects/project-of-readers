@@ -29,7 +29,6 @@ void wypiszKomunikat()
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
 	syslog(LOG_NOTICE, "READERQ: %d WriterQ: %d [in: R: %d W: %d]", (liczba_czytelnikow-aktualnieczytajacy),
 	(liczba_pisarzy-aktualniepiszacy), aktualnieczytajacy, aktualniepiszacy);
-    syslog(LOG_NOTICE,"Czekajacy czytacze: %d Czekajacy pisacze: %d",czekajacyczytacze,czekajacypisacze);
 }
 void* czytelnik(void *argument)
 {
