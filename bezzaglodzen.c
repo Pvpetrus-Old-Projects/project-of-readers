@@ -44,6 +44,7 @@ void* czytelnik(void *argument)
         }
         else if(aktualniepiszacy>0)
         {
+            czekajacyczytacze+=1;
             pthread_cond_wait(&gotowyByCzytac, &kolejka);
         }
         else
