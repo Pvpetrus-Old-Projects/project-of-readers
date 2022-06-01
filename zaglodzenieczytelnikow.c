@@ -7,8 +7,11 @@
 
 pthread_mutex_t blokadaCzytelnikow;
 pthread_mutex_t blokadaPisarzy;
+pthread_mutex_t kolejkaCzytelnikow;
+pthread_mutex_t kolejkaPisarzy; 
+
 int aktualnieczytajacy=0;
-int aktualniepiszacy=0;
+int aktualniepiszacylubczekajacy=0;
 int liczba_czytelnikow=5;
 int liczba_pisarzy=1;
 
@@ -24,7 +27,7 @@ void wypiszKomunikat()
 {
 	//funkcja wypisuje komunikat w logu na temat aktualnej ilości czekających oraz będących w czytelni
 	syslog(LOG_NOTICE, "READERQ: %d WriterQ: %d [in: R: %d W: %d]", (liczba_czytelnikow-aktualnieczytajacy),
-	(liczba_pisarzy-aktualniepiszacy), aktualnieczytajacy, aktualniepiszacy);
+	(liczba_pisarzy-aktualniepiszacylubczekajacy), aktualnieczytajacy, aktualniepiszacylubczekajacy);
 }
 void* czytelnik(void *argument)
 {
@@ -32,12 +35,17 @@ void* czytelnik(void *argument)
 	srand(time(NULL));
 	while(1==1)
 	{
+        //kolejka
+        pthread_mutex_lock(&blokadaCzytelnikow);
+        pthread_mutex_lock(&kolejkaCzytelnikow);
 		//Czytelnik próbuje wejść do czytelni
 		if(aktualnieczytajacy==0)
 		{
 			pthread_mutex_lock(&blokadaPisarzy);
 		}
 		aktualnieczytajacy+=1;
+        pthread_mutex_unlock(&kolejkaCzytelnikow);
+        pthread_mutex_unlock(&blokadaCzytelnikow);
 		usleep(generatorCzasuCzekania());//czytelnik robi coś w czytelni przez losową ilość czasu
 		wypiszKomunikat();
 		aktualnieczytajacy-=1;//czytelnik wychodzi
@@ -46,6 +54,7 @@ void* czytelnik(void *argument)
 			pthread_mutex_unlock(&blokadaPisarzy);
 		}
 		
+        usleep(generatorCzasuCzekania());
 	}
 	return 0;
 }
@@ -56,13 +65,27 @@ void* pisarz(void *argument)
 	srand(time(NULL));
 	while(1==1)
 	{
+        //kolejka
+        
+        pthread_mutex_lock(&kolejkaPisarzy);
+        aktualniepiszacylubczekajacy+=1;
+        if(aktualniepiszacylubczekajacy==1)
+        {
+            pthread_mutex_lock(&blokadaCzytelnikow);
+
+        }
+        pthread_mutex_unlock(&kolejkaPisarzy);
 		//pisarz próbuje wejść do czytelni
 		pthread_mutex_lock(&blokadaPisarzy);
-		aktualniepiszacy+=1;
 		usleep(generatorCzasuCzekania());//pisarz korzysta z czytelni
 		wypiszKomunikat();
-		aktualniepiszacy-=1;//pisarz wychodzi
+		aktualniepiszacylubczekajacy-=1;//pisarz wychodzi
+        if(aktualniepiszacylubczekajacy==0)
+        {
+            pthread_mutex_unlock(&blokadaCzytelnikow);
+        }
 		pthread_mutex_unlock(&blokadaPisarzy);
+        usleep(generatorCzasuCzekania());
 	}
 	return 0;
 }
@@ -72,6 +95,8 @@ int main(int argc, char *argv[])
 	int nr_blednego_parametru = 0;
 	pthread_mutex_init(&blokadaCzytelnikow, NULL);
 	pthread_mutex_init(&blokadaPisarzy, NULL);
+    pthread_mutex_init(&kolejkaCzytelnikow, NULL);
+    pthread_mutex_init(&kolejkaPisarzy, NULL);
 	
     if(argc>3 || argc<1) {
         printf("Zla liczba parametrow\n");
