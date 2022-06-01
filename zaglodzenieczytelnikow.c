@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	for(i=0;i<liczba_czytelnikow;i++)
 	{
 		pthread_create(&czytelnicy[i],NULL,czytelnik,NULL);
-		sleep(2);
+		sleep(1);
 		//tu należy dać funkcję czekająca pewną ilość czasu, aby zagłodzić pisarzy, gdyż po takim zabiegu, przy odpowiednim dobraniu czasu 
 		//odczekania i ilości czytelników, gdy jeden czytelnik skończy, do biblioteki przyjdzie kolejny, a biblioteka nigdy nie będzie pusta
 		//i pisarze nie będą mogli wejść
@@ -186,7 +186,8 @@ int main(int argc, char *argv[])
 	for(i=0;i<liczba_pisarzy;i++)
 	{
 		pthread_create(&pisarze[i],NULL,pisarz,NULL);
-	}
+        sleep(1);
+    }
 
 	//czekanie aż wątki się zakończą
 	for(i=0;i<liczba_czytelnikow;i++)
