@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <syslog.h>
 
-//poniższe zmienne umożliwiają zawieszenie i zwolnienie czasu wątku, do momentu spełnienia określonego warunku
+//poniższe zmienne warunkowe umożliwiają zawieszenie i zwolnienie czasu wątku, do momentu spełnienia określonego warunku
 pthread_cond_t gotowyByCzytac; 
 pthread_cond_t gotowyByPisac;
 pthread_mutex_t kolejka;
